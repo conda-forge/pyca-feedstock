@@ -1,5 +1,5 @@
 {% set name = "pyca" %}
-{% set version = "3.1.1" %}
+{% set version = "3.2.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,17 +7,17 @@ package:
 
 source:
   url: https://github.com/slaclab/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 660fffbee018439af61e48b0e82da70a1143012219124e22f0d89a20c88b73e4 
+  sha256: 284829b102afbb4b1eb34ce18b84e209dad43bec614ea89c6776462620e52176
   patches:
     - 0001-setup.patch
 
 build:
-  number: 3
-  script: "{{ PYTHON }} -m pip install . -vv"
-  skip : true  # [win]
+  number: 0
+  script: {{ PYTHON }} -m pip install . -vv
+  skip: true   # [win]
   missing_dso_whitelist:
-      - '*/libca.*'
-      - '*/libCom.*'
+    - '*/libca.*'
+    - '*/libCom.*'
 
 requirements:
   build:
@@ -45,7 +45,7 @@ about:
   license: LicenseRef-BSD-3-Clause-SLAC
   license_family: BSD
   license_file: LICENSE.md
-  summary: 'PyCA - lightweight bindings for Python applications to access EPICS PVs.'
+  summary: PyCA - lightweight bindings for Python applications to access EPICS PVs.
 
   description: |
     PyCA (Python Channel Access) is a module that offers lightweight
