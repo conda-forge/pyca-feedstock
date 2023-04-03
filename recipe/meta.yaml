@@ -12,7 +12,7 @@ source:
     - 0001-setup.patch
 
 build:
-  number: 1
+  number: 2
   script: {{ PYTHON }} -m pip install . -vv
   skip: true   # [win]
   missing_dso_whitelist:
@@ -25,14 +25,14 @@ requirements:
     - {{ compiler('cxx') }}
   host:
     - python
-    - epicscorelibs
+    - epicscorelibs {{ epicscorelibs }}
     - numpy
     - pip
     - setuptools
     - setuptools_dso
   run:
     - python
-    - epicscorelibs
+    - epicscorelibs {{ epicscorelibs }}
     - {{ pin_compatible('numpy') }}
 
 test:
@@ -61,4 +61,4 @@ extra:
   recipe-maintainers:
     - klauer
     - zllentz
-    - zrylettc
+    - tangkong
