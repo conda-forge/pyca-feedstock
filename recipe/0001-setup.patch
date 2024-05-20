@@ -32,7 +32,10 @@ index ca7efca..9759177 100644
 -else:
 -    libsrc = None
 +import numpy
-+from numpy.distutils.misc_util import get_numpy_include_dirs
++if (sys.version_info[1] >= 12):
++    import numpy.get_include as get_numpy_include_dirs
++else:
++    from numpy.distutils.misc_util import get_numpy_include_dirs
 +import epicscorelibs.path
 +import epicscorelibs.version
 +from epicscorelibs.config import get_config_var
