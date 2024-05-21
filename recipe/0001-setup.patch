@@ -12,10 +12,10 @@ index 0000000..d321210
 +
 +from .pyca import *
 diff --git a/setup.py b/setup.py
-index ca7efca..f42a725 100644
+index ca7efca..0420ed2 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -1,32 +1,38 @@
+@@ -1,39 +1,52 @@
 -from setuptools import setup, Extension
 +from setuptools_dso import setup, Extension
  import versioneer
@@ -31,7 +31,9 @@ index ca7efca..f42a725 100644
 +import platform
 +import numpy
 +if (sys.version_info[1] >= 12):
-+    from numpy import get_include as get_numpy_include_dirs
++    from numpy import get_include
++    def get_numpy_include_dirs():
++        return [get_include()]
  else:
 -    libsrc = None
 +    from numpy.distutils.misc_util import get_numpy_include_dirs
@@ -78,9 +80,11 @@ index ca7efca..f42a725 100644
  
  
  
-@@ -34,6 +40,11 @@ setup(name='pyca',
-       version=versioneer.get_version(),
-       cmdclass=versioneer.get_cmdclass(),
+ setup(name='pyca',
+-      version=versioneer.get_version(),
+-      cmdclass=versioneer.get_cmdclass(),
++    #   version=get_version(),
++    #   cmdclass=get_cmdclass(),
        description='python channel access library',
 -      packages=['psp'],
 +      packages=['psp', 'pyca'],
