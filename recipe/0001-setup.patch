@@ -12,7 +12,7 @@ index 0000000..d321210
 +
 +from .pyca import *
 diff --git a/setup.py b/setup.py
-index ca7efca..8290be0 100644
+index ca7efca..f42a725 100644
 --- a/setup.py
 +++ b/setup.py
 @@ -1,32 +1,38 @@
@@ -31,7 +31,7 @@ index ca7efca..8290be0 100644
 +import platform
 +import numpy
 +if (sys.version_info[1] >= 12):
-+    import numpy.get_include as get_numpy_include_dirs
++    from numpy import get_include as get_numpy_include_dirs
  else:
 -    libsrc = None
 +    from numpy.distutils.misc_util import get_numpy_include_dirs
