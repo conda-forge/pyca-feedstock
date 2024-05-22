@@ -1,5 +1,5 @@
 {% set name = "pyca" %}
-{% set version = "3.2.0" %}
+{% set version = "3.2.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,14 +7,14 @@ package:
 
 source:
   url: https://github.com/slaclab/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 4399a4cf89869b1cd21be41d64ab24e9a62ae7ec41335cd836b3d4680f26039f
+  sha256: 218fe0b5d34c2ef07aecfaca88a39b8d51ad8a71d52a5c2d9e11f46ac16239f2
   patches:
     - 0001-setup.patch
 
 build:
-  number: 3
+  number: 0
   script: {{ PYTHON }} -m pip install . -vv
-  skip: true   # [win]
+  skip: true  # [win]
   missing_dso_whitelist:
     - '*/libca.*'
     - '*/libCom.*'
