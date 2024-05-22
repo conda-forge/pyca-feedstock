@@ -12,10 +12,10 @@ index 0000000..d321210
 +
 +from .pyca import *
 diff --git a/setup.py b/setup.py
-index eaad7cf..c28d3e5 100644
+index eaad7cf..e4a64cf 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -1,32 +1,53 @@
+@@ -1,32 +1,52 @@
  import os
  import sys
  
@@ -85,12 +85,11 @@ index eaad7cf..c28d3e5 100644
 -setup(ext_modules=[pyca,])
 +setup(name='pyca',
 +    description='python channel access library',
-+    packages=['psp'],
 +    packages=['psp', 'pyca'],
 +    ext_modules=[pyca],
 +    install_requires = [
-+    epicscorelibs.version.abi_requires(),
-+    'numpy >=%s'%numpy.version.short_version,
++        epicscorelibs.version.abi_requires(),
++        'numpy >=%s'%numpy.version.short_version,
 +    ],
 +    zip_safe=False,
 +)
