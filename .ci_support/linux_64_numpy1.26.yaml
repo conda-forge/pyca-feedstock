@@ -21,13 +21,7 @@ docker_image:
 epicscorelibs:
 - 7.0.7.99.0.2
 numpy:
-- '1.22'
-pin_run_as_build:
-  python:
-    min_pin: x.x
-    max_pin: x.x
-python:
-- 3.8.* *_cpython
+- '1.26'
 target_platform:
 - linux-64
 zip_keys:
@@ -35,5 +29,3 @@ zip_keys:
   - cxx_compiler_version
 - - c_stdlib_version
   - cdt_name
-- - python
-  - numpy
