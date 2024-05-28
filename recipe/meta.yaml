@@ -25,14 +25,14 @@ requirements:
     - {{ stdlib("c") }}
     - {{ compiler('cxx') }}
   host:
-    - python
+    - python >=3.9
     - epicscorelibs {{ epicscorelibs }}
     - numpy
     - pip
     - setuptools
     - setuptools_dso
   run:
-    - python
+    - python >=3.9
     - epicscorelibs {{ epicscorelibs }}
     - {{ pin_compatible('numpy') }}
 
