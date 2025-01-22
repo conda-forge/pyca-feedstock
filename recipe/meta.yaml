@@ -8,8 +8,6 @@ package:
 source:
   url: https://github.com/slaclab/{{ name }}/archive/{{ version }}.tar.gz
   sha256: a53d1610d6110838862eb6b28f4430fa81441ff88343f3b603827da00133b5e5
-  patches:
-    - 0001-setup.patch
 
 build:
   number: 0
