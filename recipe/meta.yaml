@@ -33,7 +33,7 @@ requirements:
   run:
     - python
     - epicscorelibs {{ epicscorelibs }}
-
+    - numpy >=1.24
 test:
   imports:
     - pyca
