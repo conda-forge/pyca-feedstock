@@ -10,7 +10,7 @@ source:
   sha256: a53d1610d6110838862eb6b28f4430fa81441ff88343f3b603827da00133b5e5
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . -vv
   skip: true  # [win]
   missing_dso_whitelist:
@@ -33,7 +33,6 @@ requirements:
   run:
     - python
     - epicscorelibs {{ epicscorelibs }}
-    - {{ pin_compatible('numpy') }}
 
 test:
   imports:
