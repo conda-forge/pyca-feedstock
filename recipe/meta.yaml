@@ -1,5 +1,5 @@
 {% set name = "pyca" %}
-{% set version = "3.3.1" %}
+{% set version = "3.3.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/slaclab/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: d19595e047e1e7abf32abef77e1ddfe5e37a86efb5520643fb6ece2d2fe87471
+  sha256: 66d03ce939348e24cf781a8039fbb6dd9edd16134b4c0b905ea88a5344168d6d
 
 build:
   number: 0
