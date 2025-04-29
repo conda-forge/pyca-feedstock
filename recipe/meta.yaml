@@ -10,7 +10,7 @@ source:
   sha256: e7bf73a7f22986df22625e27ad25b1e7b3639db7424d6d21608f3603389c6cc4
 
 build:
-  number: 0
+  number: 1
   script: {{ PYTHON }} -m pip install . -vv
   skip: true  # [win]
   missing_dso_whitelist:
