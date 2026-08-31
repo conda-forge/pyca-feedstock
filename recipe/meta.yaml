@@ -6,16 +6,19 @@ package:
   version: {{ version }}
 
 source:
-  url: https://github.com/slaclab/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: e7bf73a7f22986df22625e27ad25b1e7b3639db7424d6d21608f3603389c6cc4
+  - url: https://github.com/slaclab/{{ name }}/archive/{{ version }}.tar.gz
+    sha256: f163b092f64499a15f832682c371e624e46196708e42df6483eec163596d6769
+    patches:
+      # Drop setuptools_dso as a build dependency: build pyca as a plain
+      # setuptools Extension linked directly against epics-base's libca/libCom
+      # instead of the private copy previously bundled by epicscorelibs.
+      - patch/no_setuptools_dso.patch
+  - path: src
 
 build:
-  number: 1
+  number: 2
   script: {{ PYTHON }} -m pip install . -vv
   skip: true  # [win]
-  missing_dso_whitelist:
-    - '*/libca.*'
-    - '*/libCom.*'
 
 requirements:
   build:
@@ -24,15 +27,14 @@ requirements:
     - {{ compiler('cxx') }}
   host:
     - python
-    - epicscorelibs {{ epicscorelibs }}
+    - epics-base
     - numpy
     - pip
     - setuptools
-    - setuptools_dso
     - setuptools_scm
   run:
     - python
-    - epicscorelibs {{ epicscorelibs }}
+    - epics-base
     - numpy >=1.24
 test:
   imports:

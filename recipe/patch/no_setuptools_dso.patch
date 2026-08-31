@@ -1,0 +1,93 @@
+--- a/setup.py	2026-08-29 21:19:42.795734877 -0400
++++ b/setup.py	2026-08-29 21:19:42.799264244 -0400
+@@ -1,18 +1,31 @@
++import os
+ import sys
+ 
+ import numpy
+ import platform
+-from setuptools_dso import Extension, setup
++from setuptools import Extension, setup
+ 
+ from numpy import get_include
+ def get_numpy_include_dirs():
+     return [get_include()]
+ 
+-import epicscorelibs.path
+-import epicscorelibs.version
+-from epicscorelibs.config import get_config_var
++from config import get_config_var
+ 
+ 
++_cmplr_class = get_config_var('CMPLR_CLASS')
++_os_class = get_config_var('OS_CLASS')
++_ta = get_config_var('T_A')
++
++_epics_base = os.environ['EPICS_BASE']
++
++epics_include_dirs = [
++    os.path.join(_epics_base, 'include'),
++    os.path.join(_epics_base, 'include', 'compiler', _cmplr_class),
++    os.path.join(_epics_base, 'include', 'os', _os_class),
++]
++
++epics_lib_dir = os.path.join(_epics_base, 'lib', _ta)
++
+ extra = []
+ if sys.platform=='linux2':
+     extra += ['-v']
+@@ -23,18 +36,19 @@
+     #   and you may need to use -headerpad or -headerpad_max_install_names)
+     extra += ['-Wl,-headerpad_max_install_names']
+ 
++if _cmplr_class != 'msvc':
++    extra += ['-Wl,-rpath,' + epics_lib_dir]
++
+ 
+ pyca = Extension(
+     name='pyca',
+     sources=['pyca/pyca.cc'],
+-    include_dirs= get_numpy_include_dirs()+[epicscorelibs.path.include_path],
+-    define_macros = get_config_var('CPPFLAGS'),
+-    extra_compile_args = get_config_var('CXXFLAGS'),
+-    extra_link_args = get_config_var('LDFLAGS')+extra,
+-    dsos = ['epicscorelibs.lib.ca',
+-            'epicscorelibs.lib.Com'
+-    ],
+-    libraries=get_config_var('LDADD'),
++    include_dirs=get_numpy_include_dirs() + epics_include_dirs,
++    define_macros=get_config_var('CPPFLAGS'),
++    extra_compile_args=get_config_var('CXXFLAGS'),
++    extra_link_args=get_config_var('LDFLAGS') + extra,
++    library_dirs=[epics_lib_dir],
++    libraries=['ca', 'Com'] + get_config_var('LDADD'),
+ )
+ 
+ setup(
+@@ -42,8 +56,7 @@
+     description='python channel access library',
+     packages=['psp', 'pyca'],
+     ext_modules=[pyca],
+-    install_requires = [
+-        epicscorelibs.version.abi_requires(),
++    install_requires=[
+         'numpy >=%s'%numpy.version.short_version,
+     ],
+     zip_safe=False,
+
+--- a/pyproject.toml	2026-08-29 21:19:42.796867298 -0400
++++ b/pyproject.toml	2026-08-29 21:19:42.800539104 -0400
+@@ -1,6 +1,5 @@
+ [build-system]
+-build-backend = "setuptools.build_meta"
+-requires = [ "setuptools>=45", "setuptools_scm[toml]>=6.2", "setuptools_dso", "numpy>1.23", "epicscorelibs"]
++requires = [ "setuptools>=45", "setuptools_scm[toml]>=6.2", "numpy>1.23"]
+ 
+ [project]
+ classifiers = [ "Development Status :: 2 - Pre-Alpha", "Natural Language :: English", "Programming Language :: Python :: 3",]
+
+--- a/requirements.txt	2026-08-29 21:19:42.797814961 -0400
++++ b/requirements.txt	2026-08-29 21:19:42.801697709 -0400
+@@ -1,2 +1 @@
+-epicscorelibs
+ numpy>1.23
