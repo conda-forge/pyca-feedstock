@@ -16,6 +16,8 @@ cxx_compiler_version:
 - '15'
 docker_image:
 - quay.io/condaforge/linux-anvil-x86_64:alma10
+epics_base:
+- 7.0.10.0
 numpy:
 - '2'
 pin_run_as_build:
