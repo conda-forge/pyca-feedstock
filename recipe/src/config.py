@@ -17,6 +17,7 @@ gcc on Linux, clang on macOS, MSVC on Windows; libstdc++ new ('=1') ABI
 on Linux since conda-forge switched ecosystem-wide in 2019.
 """
 
+import os
 import platform
 
 
@@ -44,42 +45,20 @@ def _makeconf():
 
     conf['CMPLR_CLASS'] = _CMPLR_CLASS_BY_OS[osname]
 
-    machine = platform.machine().lower()  # host CPU
-    bits = {
-        '32bit': 32,
-        '64bit': 64,
-    }[platform.architecture()[0]]
-
     conf['POSIX'] = osname != 'WIN32'
 
-    # pick a host arch (must match epics-base's EPICS_HOST_ARCH)
-    HA = None
-    if osname == 'Linux':
-        if machine == 'x86_64':
-            HA = 'linux-x86_64'
-        elif machine == 'ppc':
-            HA = 'linux-ppc'
-        elif machine.startswith('arm') or machine == 'aarch64':
-            HA = 'linux-aarch64' if machine == 'aarch64' else 'linux-arm'
-        elif machine.endswith('86'):
-            HA = 'linux-x86'
-        else:
-            raise RuntimeError("Unsupported Linkage: " + machine)
-
-    elif osname == 'Darwin':
-        if machine == 'arm64':
-            HA = 'darwin-aarch64'
-        else:
-            HA = 'darwin-x86'
-
-    elif osname == 'WIN32':
-        if bits == 64:
-            HA = 'windows-x64'
-        else:
-            HA = 'win32-x86'
-
-    if HA is None:
-        raise RuntimeError("Unable to determine host arch")
+    # epics-base's activate script (conda-forge/epics-base-feedstock)
+    # exports EPICS_HOST_ARCH directly; prefer that over re-deriving it
+    # from platform.machine(), which would need to be kept in sync with
+    # however epics-base itself picks arch names (see also
+    # epicscorelibs.path._host_arch() in the epicscorelibs-feedstock
+    # depend-on-epics-base branch, which takes the same approach).
+    HA = os.environ.get('EPICS_HOST_ARCH')
+    if not HA:
+        raise RuntimeError(
+            "EPICS_HOST_ARCH is not set in the environment; "
+            "is the epics-base package activated?"
+        )
 
     conf['EPICS_HOST_ARCH'] = conf['T_A'] = HA
     return conf
