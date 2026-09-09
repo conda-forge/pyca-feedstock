@@ -16,7 +16,7 @@ source:
   - path: src
 
 build:
-  number: 2
+  number: 3
   script: {{ PYTHON }} -m pip install . -vv
   skip: true  # [win]
 
@@ -27,14 +27,20 @@ requirements:
     - {{ compiler('cxx') }}
   host:
     - python
-    - epics-base
+    - epics-base {{ epics_base }}
     - numpy
     - pip
     - setuptools
     - setuptools_scm
   run:
     - python
-    - epics-base
+    # pyca compiles/links directly against epics-base's headers/libca/libCom
+    # (see recipe/patch/no_setuptools_dso.patch) rather than merely using it
+    # at runtime through a stable ABI-versioned interface, so an exact match
+    # on the epics-base build actually used at build time is required here -
+    # epics-base's own run_exports (a version range bound only) is not
+    # sufficient to guarantee ABI/soname compatibility between builds.
+    - {{ pin_compatible('epics-base', exact=True) }}
     - numpy >=1.24
 test:
   imports:
@@ -51,11 +57,11 @@ about:
   description: |
     PyCA (Python Channel Access) is a module that offers lightweight
     bindings for Python applications to access EPICS PVs. It acts as
-    a channel access client, much like pyepics. The intention of the 
+    a channel access client, much like pyepics. The intention of the
     module is to provide better performance for embedded applications,
     rather than to provide an interactive interface. The most significant
     gains will be found when monitoring large waveforms that need to be
-    processed before exposing them the Python layer.      
+    processed before exposing them the Python layer.
   dev_url: https://github.com/slaclab/pyca
 
 extra:
